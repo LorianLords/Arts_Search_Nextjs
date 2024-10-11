@@ -40,17 +40,18 @@ const Card: FC<CardProps> = (props: CardProps) => {
 
   return (
     <div
-
-    /* onClick={handleCardDetails}*/
+      className={styles.card}
+      /* onClick={handleCardDetails}*/
     >
       <Checkbox id={props.id} />
       {/*{!isLoaded && <img src={placeholder} alt="placeholder" />}*/}
 
       <ImageCard image={props.image} />
-
-      <h2>{props.title}</h2>
-      <p>{props.date_display}</p>
-      <p>{props.artist_display}</p>
+      <div className={styles.textBlock}>
+        <h2>{props.title}</h2>
+        <p>{props.date_display} y.</p>
+        <p>{props.artist_display}</p>
+      </div>
     </div>
   );
 };

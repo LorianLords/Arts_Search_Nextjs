@@ -3,7 +3,7 @@ import { CardDetailProps } from '../../types/types';
 //import { fetchCardDetails } from "../../services/apiService.ts";
 
 export interface DetailsState {
-  isDetailsOpen: boolean;
+  isDetailsOpen: true | false | 'first';
   cardId: string;
   detInfo: CardDetailProps | null;
   detLoading: boolean;
@@ -13,7 +13,7 @@ export interface DetailsState {
 }
 
 const initialState: DetailsState = {
-  isDetailsOpen: false,
+  isDetailsOpen: 'first',
   cardId: '',
   detInfo: null,
   detLoading: true,

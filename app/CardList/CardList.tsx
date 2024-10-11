@@ -15,6 +15,7 @@ import CardWrapper from '@/app/CardList/Card/CardWrapper';
 import { ErrorHandler } from '@/utils/ErrorHandler';
 import { toggleIsDetailsOpen } from '@/redux/DetailsSlice/DetailsSlice';
 import { setSearch } from '@/redux/SearchSlice/SearchSlice';
+import CardDetails from '@/app/CardList/CardDetails/CardDetails';
 
 const CardList = () => {
   const [handErr, setHandErr] = useState(false);
@@ -24,10 +25,8 @@ const CardList = () => {
   const hasRun = useRef(false);
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
-  const params = useSearchParams();
+  const router = useRouter();
 
-  console.log('CARDLIST');
-  console.log(searchText);
   const { isLoading, error, isFetching, data } = useGetCardListQuery(
     {
       searchText,
@@ -40,11 +39,7 @@ const CardList = () => {
   useEffect(() => {
     if (!hasRun.current) {
       const page = parseInt(searchParams.get('page') || '1', 10);
-      console.log('GET', page);
-      const search = params.get('search');
-      console.log(search);
-      console.log(typeof search);
-      console.log(search === '' ? '' : (search as string));
+      const search = searchParams.get('search');
       dispatch(setSearch(search === null ? '' : (search as string)));
       if (page) {
         dispatch(setCurrentPage(page));
@@ -77,7 +72,7 @@ const CardList = () => {
 
   return (
     <div
-      className={`${styles.cardList} ${isDetailsOpen && styles.panelOpen}`}
+      className={`${styles.cardList} ${isDetailsOpen === true && styles.panelOpen}`}
       onClick={sidePanelHandler}
     >
       <button className={styles.errButton} onClick={errorHandle}>
@@ -86,14 +81,14 @@ const CardList = () => {
       {cardList.map((item: CardProps) => (
         <CardWrapper item={item} key={item.id} />
         /* <Card
-          key={item.id}
-          id={item.id}
-          title={item.title}
-          date_display={item.date_display}
-          artist_display={item.artist_display}
-          image={item.image}
-          image_id={item.image_id}
-        />*/
+            key={item.id}
+            id={item.id}
+            title={item.title}
+            date_display={item.date_display}
+            artist_display={item.artist_display}
+            image={item.image}
+            image_id={item.image_id}
+          />*/
       ))}
     </div>
   );

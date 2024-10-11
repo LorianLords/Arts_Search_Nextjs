@@ -25,6 +25,7 @@ const Pagination = () => {
       const searchParams = new URLSearchParams(window.location.search);
       searchParams.set('page', currentPage.toString());
       replace(`${pathname}?${searchParams.toString()}`);
+      localStorage.setItem('page', currentPage.toString());
       console.log('put', currentPage);
     }
   }, [currentPage]);
@@ -42,7 +43,7 @@ const Pagination = () => {
   };
 
   return (
-    <div className={`${styles.pagination} ${isDetailsOpen && styles.openPanel}`}>
+    <div className={`${styles.pagination} ${isDetailsOpen === true && styles.openPanel}`}>
       <button className={styles.pagBtn} onClick={handlePrevious}>
         Previous
       </button>

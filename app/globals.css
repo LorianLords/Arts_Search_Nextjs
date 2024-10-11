@@ -11,21 +11,25 @@
   --navbar-color: #373737;
   --background-image: url("../public/dark_wallper2.jpg");
   --search-color: #1f242f;
+  --search-bar: #1c1c1c;
   --background-card: rgba(40, 38, 38, 0.77);
-  --hover-card: #c4b1b1;
+  --hover-card: #393333;
   --border-card: 4px solid darkcyan;
   --panel-color: rgba(104, 121, 104, 0.85);
-
+  --card-shadows:   0 4px 20px rgba(0, 0, 0, 0.5);
+  --card-hover-shadow: 50 8px 30px rgba(0, 0, 0, 0.7);
 }
 
 [data-theme='light']{
   --navbar-color:  #B3D1E8;
   --search-color: #2A6F9E;
-
+  --search-bar: #b2cfe6;
   --background-card: rgba(253, 253, 253, 0.77);
   --border-card: none;
   --hover-card:  rgba(61, 173, 244, 0.77);
   --panel-color: rgba(83, 153, 209, 0.77);
+  --card-shadows: 0 5px 15px rgba(0, 0, 0, 0.2),
+  0 2px 5px rgba(255, 255, 255, 0.7) inset;
 }
 
 

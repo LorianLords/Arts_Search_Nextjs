@@ -3,8 +3,10 @@ import stylesInfo from './CardDetails.module.css';
 import Loading from '@/components/Loading';
 import { useGetCardDetailsQuery } from '@/redux/Api/DetailsApi';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
-import { toggleIsDetailsOpen } from '@/redux/DetailsSlice/DetailsSlice';
-import React from 'react';
+import { setCardId, toggleIsDetailsOpen } from '@/redux/DetailsSlice/DetailsSlice';
+import React, { useEffect } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const CardDetails = () => {
   const dispatch = useAppDispatch();
@@ -14,7 +16,23 @@ const CardDetails = () => {
     isLoading,
     isFetching,
   } = useGetCardDetailsQuery({ cardId }, { skip: !cardId });
-
+  const params = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  useEffect(() => {
+    const id = params.get('id');
+    if (!isDetailsOpen && id) {
+      const newParams = new URLSearchParams(params.toString());
+      newParams.delete('id');
+      router.push(pathname + '?' + newParams);
+    }
+    if (isDetailsOpen === 'first' && id) {
+      console.log('---------------------------------------');
+      console.log(id);
+      dispatch(toggleIsDetailsOpen(true));
+      dispatch(setCardId(id));
+    }
+  }, [isDetailsOpen]);
   const handleBtnBack = () => {
     dispatch(toggleIsDetailsOpen(false));
   };
@@ -25,7 +43,7 @@ const CardDetails = () => {
 
   return (
     <div
-      className={`${stylesInfo.sideDetails} ${isDetailsOpen && stylesInfo.open} `}
+      className={`${stylesInfo.sideDetails} ${isDetailsOpen === true && stylesInfo.open} `}
       onClick={handleSideMenu}
     >
       {isLoading || isFetching ? (

@@ -21,3 +21,49 @@
     background-color: #1f242f;
 }
 */
+.searchBar {
+    display: flex; /* Используем flexbox для выравнивания элементов */
+    align-items: center; /* Центрируем элементы по вертикали */
+    background-color: var(--search-bar); /* Темный фон контейнера */
+    border-radius: 8px; /* Закругленные углы */
+    margin-top: 20px;
+    padding: 8px; /* Отступы внутри контейнера */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Мягкая тень */
+    transition: background-color 0.6s ease,  box-shadow 0.3s ease;
+}
+
+.searchInput {
+    width: 250px; /* Ширина поля ввода */
+    padding: 10px; /* Отступы внутри поля ввода */
+    border: none; /* Без рамки */
+    border-radius: 4px; /* Закругление углов */
+    background-color: #fdfdfd; /* Темный фон для поля ввода */
+    color: black; /* Цвет текста */
+    font-size: 16px; /* Размер шрифта */
+    transition: background-color 0.3s ease; /* Плавный переход для фона */
+}
+.searchInput::placeholder {
+    color: #aaa; /* Цвет для плейсхолдера */
+    opacity: 1; /* Делаем плейсхолдер более заметным */
+}
+
+.searchInput:hover,
+.searchInput:focus {
+    background-color: #145388; /* Светлее цвет фона при наведении и фокусе */
+    outline: none; /* Убираем стандартное обрамление */
+}
+
+.searchButton {
+    margin-left: 10px; /* Отступ слева от поля ввода */
+    padding: 10px 15px; /* Отступы внутри кнопки */
+    background-color: #002244; /* Акцентный цвет кнопки */
+    color: #ffffff; /* Белый цвет текста */
+    border: none; /* Без рамки */
+    border-radius: 4px; /* Закругление углов кнопки */
+    cursor: pointer; /* Указатель для курсора */
+    transition: background-color 0.3s; /* Плавный переход для кнопки */
+}
+
+.searchButton:hover {
+    background-color: #0056b3; /* Цвет при наведении кнопки */
+}

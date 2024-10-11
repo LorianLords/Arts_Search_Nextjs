@@ -2,9 +2,10 @@ import React from 'react';
 import styles from './Home.module.css';
 import Pagination from '@/components/Pagination/Pagination';
 import CardList from '@/app/CardList/CardList';
-import CardDetails from '@/components/CardDetails/CardDetails';
+import Page from '@/app/CardList/CardDetails/CardDetails';
 import { setSearch } from '@/redux/SearchSlice/SearchSlice';
 import { useAppDispatch } from '@/services/hooks';
+import CardDetails from '@/app/CardList/CardDetails/CardDetails';
 
 /*
 type Params = {

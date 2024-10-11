@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from '../TheHeader.module.css';
+import React from 'react';
 type NavLink = {
   label: string;
   href: string;
@@ -15,6 +16,13 @@ const Navigation = ({ navLinks }: Props) => {
   const pathname = usePathname();
   const part = 20;
 
+  if (typeof window !== 'undefined') {
+    const search = localStorage.getItem('searchText');
+    const page = localStorage.getItem('page');
+    if (search) {
+      navLinks[0].href = `/?page=${page}&search=${search}`;
+    }
+  }
   console.log(part);
   return (
     <>

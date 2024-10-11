@@ -3,6 +3,7 @@ import { useTheme } from '../../services/ThemeContext';
 
 const ThemeToggle = () => {
   //  const { theme, setTheme } = useContext(themeContext);
+
   const { theme, toggleTheme } = useTheme();
   return (
     <div>
