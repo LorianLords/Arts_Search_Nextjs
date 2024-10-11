@@ -62,7 +62,11 @@ const CardDetails = () => {
             {detInfo?.artist_titles[0]}, {detInfo?.date_display}
           </p>
           <p>{detInfo?.place_of_origin}</p>
-          <p>{detInfo?.short_description || detInfo?.description}</p>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: detInfo?.short_description || detInfo?.description || '__',
+            }}
+          />
           <p>Categories: {detInfo?.category_titles.map((title) => title + ', ')}</p>
 
           <button className={stylesInfo.backBtn} onClick={handleBtnBack}>

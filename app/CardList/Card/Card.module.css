@@ -131,8 +131,18 @@
   flex-direction: column;
 }
 .textBlock p{
-  margin: 8px;
+  margin: 6px;
   font-size: 0.9em;
+}
+.textBlockArtist{
+  height: 70px;
+
+
+  overflow: hidden;
+  text-overflow: ellipsis; /* Добавляет троеточие в конце переполненного текста */
+  display: -webkit-box; /* Для поддержки многострочности */
+  -webkit-line-clamp: 2; /* Количество строк до обрезки */
+  -webkit-box-orient: vertical; /* Вертикальная ориентация */
 }
 .textBlock h2{
   height: 50px;

@@ -50,7 +50,7 @@ const Card: FC<CardProps> = (props: CardProps) => {
       <div className={styles.textBlock}>
         <h2>{props.title}</h2>
         <p>{props.date_display} y.</p>
-        <p>{props.artist_display}</p>
+        <p className={styles.textBlockArtist}>{props.artist_display}</p>
       </div>
     </div>
   );

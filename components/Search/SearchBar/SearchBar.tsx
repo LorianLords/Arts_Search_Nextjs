@@ -19,9 +19,11 @@ const SearchBar = () => {
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
+      console.log(value);
       const params = new URLSearchParams(searchParams.toString());
       if (value === '') params.delete(name);
       else params.set(name, value);
+      console.log(params);
       return params.toString();
     },
     [searchParams],
@@ -32,13 +34,13 @@ const SearchBar = () => {
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+    console.log(inputText.trim());
     router.push(
       pathname + '?' + createQueryString('search', inputText.trim().replace(/\s+/g, '_')),
     );
     dispatch(setSearch(inputText.trim()));
     dispatch(setCurrentPage(1));
-
+    e.preventDefault();
     //if (inputText.trim() == '') localStorage.removeItem('searchText');
   };
 
