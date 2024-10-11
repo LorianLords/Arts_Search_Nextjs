@@ -6,6 +6,7 @@ import Page from '@/app/CardList/CardDetails/CardDetails';
 import { setSearch } from '@/redux/SearchSlice/SearchSlice';
 import { useAppDispatch } from '@/services/hooks';
 import CardDetails from '@/app/CardList/CardDetails/CardDetails';
+import FooterPopup from '@/components/FooterPopup/FooterPopup';
 
 /*
 type Params = {
@@ -32,6 +33,7 @@ export default function Home() {
       <CardList />
       <Pagination />
       <CardDetails />
+      <FooterPopup />
     </div>
   );
 }

@@ -1,0 +1,27 @@
+.alertSuccess {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    right: 80px;
+    width: 230px;
+    height: 40px;
+    background-color: #019b01;
+    border-radius: 10px;
+    border: solid 1px #040404;
+    font-size: 20px;
+    transition: all 0.5s ease;
+
+    opacity: 0;
+    transform: translateY(0);
+}
+
+
+.alertSuccess.success{
+    opacity: 1;
+    transform: translateY(140px);
+}
+.alertSuccess p {
+    white-space: nowrap
+}

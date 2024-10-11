@@ -1,31 +1,27 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import Card from '@/app/CardList/Card/Card';
 import styles from './CarList.module.css';
-//import Loading.tsx from '../Loading.tsx.tsx';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { CardProps } from '@/types/types';
 import { useGetCardListQuery } from '@/redux/Api/apiSlice';
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { SerializedError } from '@reduxjs/toolkit';
 import Loading from '@/components/Loading';
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { setCurrentPage } from '@/redux/PaginationSlice/PaginationSlice';
 import CardWrapper from '@/app/CardList/Card/CardWrapper';
 import { ErrorHandler } from '@/utils/ErrorHandler';
 import { toggleIsDetailsOpen } from '@/redux/DetailsSlice/DetailsSlice';
 import { setSearch } from '@/redux/SearchSlice/SearchSlice';
-import CardDetails from '@/app/CardList/CardDetails/CardDetails';
+import SuccessDownloading from '@/components/SuccessDownloading/SuccessDownloading';
 
 const CardList = () => {
   const [handErr, setHandErr] = useState(false);
   const { searchText } = useAppSelector((state) => state.search);
   const { currentPage } = useAppSelector((state) => state.pagination);
   const { isDetailsOpen } = useAppSelector((state) => state.details);
+  const { isSuccess } = useAppSelector((state) => state.cardList);
   const hasRun = useRef(false);
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
   const { isLoading, error, isFetching, data } = useGetCardListQuery(
     {
@@ -90,6 +86,7 @@ const CardList = () => {
             image_id={item.image_id}
           />*/
       ))}
+      {isSuccess && <SuccessDownloading />}
     </div>
   );
 };
