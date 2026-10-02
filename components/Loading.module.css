@@ -1,0 +1,20 @@
+.loading {
+  display: grid;
+  place-items: center;
+  padding: clamp(80px, 16vw, 180px) 0;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-top-color: var(--ink);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
