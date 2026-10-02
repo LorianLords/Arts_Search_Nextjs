@@ -1,23 +1,27 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { motion, Variants } from 'motion/react';
 import styles from './CarList.module.css';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { CardProps } from '@/types/types';
 import { useGetCardListQuery } from '@/redux/Api/apiSlice';
-import Loading from '@/components/Loading';
 import { useSearchParams } from 'next/navigation';
 import { setCurrentPage } from '@/redux/PaginationSlice/PaginationSlice';
 import CardWrapper from '@/app/CardList/Card/CardWrapper';
 import { ErrorHandler } from '@/utils/ErrorHandler';
-import { toggleIsDetailsOpen } from '@/redux/DetailsSlice/DetailsSlice';
 import { setSearch } from '@/redux/SearchSlice/SearchSlice';
 import SuccessDownloading from '@/components/SuccessDownloading/SuccessDownloading';
 
+const SKELETON_COUNT = 10;
+
+const listVariants: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.06 } },
+};
+
 const CardList = () => {
-  const [handErr, setHandErr] = useState(false);
   const { searchText } = useAppSelector((state) => state.search);
   const { currentPage } = useAppSelector((state) => state.pagination);
-  const { isDetailsOpen } = useAppSelector((state) => state.details);
   const { isSuccess } = useAppSelector((state) => state.cardList);
   const hasRun = useRef(false);
   const searchParams = useSearchParams();
@@ -43,51 +47,52 @@ const CardList = () => {
       hasRun.current = true;
     }
   }, []);
-  const errorHandle = () => {
-    console.log('Error button clicked');
-    setHandErr(true);
-  };
-
-  const sidePanelHandler = () => {
-    dispatch(toggleIsDetailsOpen(false));
-  };
 
   if (error) {
     ErrorHandler(error);
   }
-  if (handErr) throw new Error('I crashed!');
-  if (isLoading || isFetching) return <Loading />;
+
+  // Пока поиск не прочитан из URL, запрос ещё не начат — тоже показываем скелетон
+  if (isLoading || isFetching || typeof searchText === 'undefined') {
+    return (
+      <div className={styles.cardList} aria-busy="true" aria-label="Loading artworks">
+        {Array.from({ length: SKELETON_COUNT }, (_, i) => (
+          <div className={styles.skeleton} key={i}>
+            <div className={styles.skeletonImage} />
+            <div className={styles.skeletonLine} />
+            <div className={`${styles.skeletonLine} ${styles.short}`} />
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   if (!cardList || cardList.length === 0) {
     return (
-      <div className="about">
-        <h3>Sorry. There are no such pictures </h3>
+      <div className={styles.empty}>
+        <h2>No works found</h2>
+        <p>
+          {searchText
+            ? `Nothing in the collection matches “${searchText}”. Try a different artist, title or subject.`
+            : 'There is nothing to show on this page.'}
+        </p>
       </div>
     );
   }
 
   return (
-    <div
-      className={`${styles.cardList} ${isDetailsOpen === true && styles.panelOpen}`}
-      onClick={sidePanelHandler}
+    <motion.div
+      key={`${searchText}-${currentPage}`}
+      className={styles.cardList}
+      variants={listVariants}
+      initial="hidden"
+      animate="show"
     >
-      <button className={styles.errButton} onClick={errorHandle}>
-        Error
-      </button>
       {cardList.map((item: CardProps) => (
         <CardWrapper item={item} key={item.id} />
-        /* <Card
-            key={item.id}
-            id={item.id}
-            title={item.title}
-            date_display={item.date_display}
-            artist_display={item.artist_display}
-            image={item.image}
-            image_id={item.image_id}
-          />*/
       ))}
       {isSuccess && <SuccessDownloading />}
-    </div>
+    </motion.div>
   );
 };
 

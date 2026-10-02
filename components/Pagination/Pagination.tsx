@@ -1,20 +1,16 @@
 'use client';
 import { useAppDispatch, useAppSelector } from '@/services/hooks';
 import { useEffect, useRef } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import {
   decrementCurPage,
   incrementCurPage,
-  setCurrentPage,
 } from '@/redux/PaginationSlice/PaginationSlice';
 import styles from './Pagination.module.css';
 const Pagination = () => {
-  //const [searchParams, setSearchParams] = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
-  //const searchParams = useSearchParams();
   const { totalPages, currentPage } = useAppSelector((state) => state.pagination);
-  const { isDetailsOpen } = useAppSelector((state) => state.details);
   const hasRun = useRef(false);
   const dispatch = useAppDispatch();
 
@@ -26,34 +22,67 @@ const Pagination = () => {
       searchParams.set('page', currentPage.toString());
       replace(`${pathname}?${searchParams.toString()}`);
       localStorage.setItem('page', currentPage.toString());
-      console.log('put', currentPage);
     }
   }, [currentPage]);
 
+  const isFirst = currentPage <= 1;
+  const isLast = currentPage >= totalPages;
+
+  const scrollToList = () => {
+    document
+      .getElementById('content-container')
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   const handlePrevious = () => {
-    if (currentPage > 1) {
+    if (!isFirst) {
       dispatch(decrementCurPage());
+      scrollToList();
     }
   };
 
   const handleNext = () => {
-    if (currentPage <= totalPages) {
+    if (!isLast) {
       dispatch(incrementCurPage());
+      scrollToList();
     }
   };
 
   return (
-    <div className={`${styles.pagination} ${isDetailsOpen === true && styles.openPanel}`}>
-      <button className={styles.pagBtn} onClick={handlePrevious}>
+    <nav className={styles.pagination} aria-label="Pagination">
+      <button className={styles.pagBtn} onClick={handlePrevious} disabled={isFirst}>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M20 12H4M10 6l-6 6 6 6" />
+        </svg>
         Previous
       </button>
       <span className={styles.pagText}>
-        Page {currentPage} of {totalPages}
+        <b>{currentPage.toLocaleString('en-US')}</b> /{' '}
+        {totalPages.toLocaleString('en-US')}
       </span>
-      <button className={styles.pagBtn} onClick={handleNext}>
+      <button className={styles.pagBtn} onClick={handleNext} disabled={isLast}>
         Next
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4 12h16M14 6l6 6-6 6" />
+        </svg>
       </button>
-    </div>
+    </nav>
   );
 };
 

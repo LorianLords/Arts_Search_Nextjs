@@ -1,17 +1,6 @@
-
 .content {
     display: flex;
-    position: relative;
-    padding: 20px;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
-    margin-right: 0;
-
+    padding-top: clamp(24px, 4vw, 48px);
+    padding-bottom: 140px;
 }
-.contentOpen{
-    margin-right: 450px;
-}
-
-
-

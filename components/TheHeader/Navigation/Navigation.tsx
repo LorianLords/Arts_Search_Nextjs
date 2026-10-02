@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from '../TheHeader.module.css';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 type NavLink = {
   label: string;
   href: string;
@@ -14,16 +14,15 @@ type Props = {
 };
 const Navigation = ({ navLinks }: Props) => {
   const pathname = usePathname();
-  const part = 20;
+  const [homeHref, setHomeHref] = useState('/');
 
-  if (typeof window !== 'undefined') {
+  // Возврат к последнему поиску: читаем localStorage после гидрации
+  useEffect(() => {
     const search = localStorage.getItem('searchText');
-    const page = localStorage.getItem('page');
-    if (search) {
-      navLinks[0].href = `/?page=${page}&search=${search}`;
-    }
-  }
-  console.log(part);
+    const page = localStorage.getItem('page') || '1';
+    setHomeHref(search ? `/?page=${page}&search=${encodeURIComponent(search)}` : '/');
+  }, [pathname]);
+
   return (
     <>
       {navLinks.map((link) => {
@@ -32,9 +31,9 @@ const Navigation = ({ navLinks }: Props) => {
         return (
           <li key={link.label}>
             <Link
-              key={link.label}
-              href={link.href}
+              href={link.href === '/' ? homeHref : link.href}
               className={`${styles.link} ${isActive ? styles.active : ''}`}
+              aria-current={isActive ? 'page' : undefined}
             >
               {link.label}
             </Link>

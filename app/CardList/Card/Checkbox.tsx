@@ -6,30 +6,34 @@ import { toggleCard } from '@/redux/CardListSlice/CardListSlice';
 
 interface checkboxProps {
   id: number;
+  title: string;
 }
 
-const Checkbox = ({ id }: checkboxProps) => {
+const Checkbox = ({ id, title }: checkboxProps) => {
   const { selectedCards } = useAppSelector((state) => state.cardList);
   const dispatch = useAppDispatch();
+  const isChecked = selectedCards.includes(id.toString());
   const handleCheckboxChange = (id: number) => {
     dispatch(toggleCard(id.toString()));
   };
 
   return (
     <div
-      className={styles.checkboxContainer}
+      className={`${styles.checkboxContainer} ${isChecked ? styles.checked : ''}`}
       onClick={(e) => {
         e.stopPropagation();
       }}
+      onKeyDown={(e) => {
+        e.stopPropagation();
+      }}
     >
-      <div className={`${styles.checkboxWrapper}`}>
-        <input
-          type="checkbox"
-          className={styles.checkbox}
-          checked={selectedCards.includes(id.toString())}
-          onChange={() => handleCheckboxChange(id)}
-        />
-      </div>
+      <input
+        type="checkbox"
+        className={styles.checkbox}
+        checked={isChecked}
+        aria-label={`Select “${title}”`}
+        onChange={() => handleCheckboxChange(id)}
+      />
     </div>
   );
 };

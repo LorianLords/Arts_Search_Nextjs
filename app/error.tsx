@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import styles from './page.module.css';
 
 const ErrorPage = ({
   error,
@@ -15,19 +16,23 @@ const ErrorPage = ({
   }, [error]);
 
   return (
-    <div className="error-page">
-      <h1>Oops! Error 404</h1>
+    <div className={`container ${styles.textPage}`}>
+      <p className={styles.overline}>Error</p>
+      <h1>
+        Something went <em>wrong</em>
+      </h1>
       <p>Sorry, an unexpected error has occurred.</p>
-      <p>
+      <p className={styles.muted}>
         <i>{error.message}</i>
       </p>
       <button
+        className={styles.action}
         onClick={
           // Attempt to recover by trying to re-render the segment
           () => reset()
         }
       >
-        &larr; Go back
+        Try again
       </button>
     </div>
   );

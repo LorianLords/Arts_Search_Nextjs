@@ -19,11 +19,9 @@ const SearchBar = () => {
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
-      console.log(value);
       const params = new URLSearchParams(searchParams.toString());
       if (value === '') params.delete(name);
       else params.set(name, value);
-      console.log(params);
       return params.toString();
     },
     [searchParams],
@@ -33,30 +31,52 @@ const SearchBar = () => {
     setInput(e.target.value);
   };
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log(inputText.trim());
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     router.push(
       pathname + '?' + createQueryString('search', inputText.trim().replace(/\s+/g, '_')),
     );
     dispatch(setSearch(inputText.trim()));
     dispatch(setCurrentPage(1));
-    e.preventDefault();
-    //if (inputText.trim() == '') localStorage.removeItem('searchText');
   };
 
   return (
-    <div className={styles.searchBar}>
+    <form className={styles.searchBar} onSubmit={handleSubmit} role="search">
+      <svg
+        className={styles.searchIcon}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        aria-hidden="true"
+      >
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-3.5-3.5" />
+      </svg>
       <input
-        type="text"
+        type="search"
         value={inputText}
         className={styles.searchInput}
-        placeholder={'Search...'}
+        placeholder={'Artist, title, subject…'}
+        aria-label="Search the collection"
         onChange={handleChange}
       />
-      <button className={styles.searchButton} onClick={handleSubmit}>
+      <button type="submit" className={styles.searchButton}>
         Search
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4 12h16M14 6l6 6-6 6" />
+        </svg>
       </button>
-    </div>
+    </form>
   );
 };
 

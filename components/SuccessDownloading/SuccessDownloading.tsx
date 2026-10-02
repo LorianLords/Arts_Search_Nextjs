@@ -7,17 +7,39 @@ const SuccessDownloading = () => {
   const [isVisible, setIsVisible] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
-    setTimeout(() => {
+    const showTimer = setTimeout(() => {
       setIsVisible(true);
     }, 100);
-    setTimeout(() => {
+    const hideTimer = setTimeout(() => {
       setIsVisible(false);
-      dispatch(setIsSuccess(false));
     }, 2800);
+    // Снимаем флаг после того, как уведомление успело скрыться
+    const doneTimer = setTimeout(() => {
+      dispatch(setIsSuccess(false));
+    }, 3300);
+    return () => {
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
+      clearTimeout(doneTimer);
+    };
   }, []);
   return (
-    <div className={`${styles.alertSuccess} ${isVisible ? styles.success : ''}`}>
-      <p>Downloading is success</p>
+    <div
+      className={`${styles.alertSuccess} ${isVisible ? styles.success : ''}`}
+      role="status"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m5 12.5 4.5 4.5L19 7.5" />
+      </svg>
+      <p>CSV downloaded</p>
     </div>
   );
 };

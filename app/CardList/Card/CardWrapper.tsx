@@ -1,6 +1,7 @@
 'use client';
 import Card from '@/app/CardList/Card/Card';
 import React from 'react';
+import { motion, Variants } from 'motion/react';
 import { CardProps } from '@/types/types';
 import { useAppDispatch } from '@/services/hooks';
 import { setCardId, toggleIsDetailsOpen } from '@/redux/DetailsSlice/DetailsSlice';
@@ -9,7 +10,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 type CardWrapperProps = {
   item: CardProps;
-  key: number;
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 };
 
 const CardWrapper = ({ item }: CardWrapperProps) => {
@@ -17,29 +22,50 @@ const CardWrapper = ({ item }: CardWrapperProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const openDetails = () => {
     dispatch(toggleIsDetailsOpen(true));
     dispatch(setCardId(item.id));
-    e.stopPropagation();
 
-    const page = searchParams.get('page') || '1';
+    const params = new URLSearchParams();
+    params.set('id', item.id.toString());
+    params.set('page', searchParams.get('page') || '1');
     const search = searchParams.get('search');
-    if (search) router.push(`/?id=${item.id}&page=${page}&search=${search}`);
-    else router.push(`/?id=${item.id}&page=${page}`);
+    if (search) params.set('search', search);
+    router.push(`/?${params.toString()}`);
+  };
+
+  const handleCardClick = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    openDetails();
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openDetails();
+    }
   };
 
   return (
-    <div onClick={handleCardClick} className={styles.cardWrapper}>
+    <motion.article
+      variants={cardVariants}
+      onClick={handleCardClick}
+      onKeyDown={handleKeyDown}
+      className={styles.cardWrapper}
+      role="button"
+      tabIndex={0}
+      aria-label={`${item.title}, open details`}
+    >
       <Card
-        key={item.id}
         id={item.id}
         title={item.title}
         date_display={item.date_display}
         artist_display={item.artist_display}
         image={item.image}
         image_id={item.image_id}
+        thumbnail={item.thumbnail}
       />
-    </div>
+    </motion.article>
   );
 };
 

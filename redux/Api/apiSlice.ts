@@ -21,7 +21,7 @@ export const apiSlice = createApi({
           url,
           params: {
             q: searchText,
-            fields: 'id,title,artist_display,date_display,image_id,pagination',
+            fields: 'id,title,artist_display,date_display,image_id,thumbnail,pagination',
             limit: 10,
             page: currentPage || 1,
           },

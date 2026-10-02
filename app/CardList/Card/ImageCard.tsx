@@ -1,44 +1,63 @@
-import defaultImg from '@/public/react.svg';
+'use client';
 import React, { useState } from 'react';
-import placeholder from '@/public/placeholder.jpg';
+import { motion } from 'motion/react';
 import style from './Card.module.css';
-import Image from 'next/image';
+import { Thumbnail } from '@/types/types';
+
+// Пропорции области под картину в карточке (ширина / высота), как в Card.module.css
+const STAGE_RATIO = 4 / 5;
 
 interface imageProps {
+  id: number;
   image: string | null;
+  title: string;
+  thumbnail?: Thumbnail | null;
 }
-const ImageCard = ({ image }: imageProps) => {
+const ImageCard = ({ id, image, title, thumbnail }: imageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [imgSrc, setImgSrc] = useState(image || defaultImg);
-  console.log(image);
+  const [isFailed, setIsFailed] = useState(false);
+
+  if (!image || isFailed) {
+    return (
+      <div className={style.imageContainer}>
+        <div className={style.stage}>
+          <p className={style.noImage}>Image not available</p>
+        </div>
+      </div>
+    );
+  }
+
+  const ratio =
+    thumbnail?.width && thumbnail?.height ? thumbnail.width / thumbnail.height : 1;
+  // Вписываем рамку в область целиком, не обрезая картину
+  const width = ratio >= STAGE_RATIO ? 100 : (ratio / STAGE_RATIO) * 100;
+
   return (
     <div className={style.imageContainer}>
-      {!isLoaded && (
-        <Image
-          className={style.cardImage}
-          src={placeholder}
-          alt="placeholder"
-          fill={true}
-        />
-      )}
-      <Image
-        src={imgSrc}
-        className={style.cardImage}
-        alt="picture"
-        onLoad={() => setIsLoaded(true)}
-        onError={() => {
-          setIsLoaded(false);
-          setImgSrc(defaultImg);
-        }}
-        /*  style={{ display: isLoaded ? 'block' : 'none', objectFit: 'cover' }}*/
-        fill={true}
-        sizes={'(max-width: 500px) 100vw'}
-        /* layout="fill" // Will size the image to fill the parent container
-        objectFit="contain" // see - https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit
-        objectPosition="center"*/
-        /* placeholder={'blur'}
-        blurDataURL={image || defaultImg}*/
-      />
+      <div className={style.stage}>
+        <motion.div
+          layoutId={`art-${id}`}
+          className={style.frame}
+          style={{
+            aspectRatio: ratio,
+            width: `${width}%`,
+            backgroundImage: thumbnail?.lqip ? `url(${thumbnail.lqip})` : undefined,
+          }}
+        >
+          <img
+            src={image}
+            className={`${style.cardImage} ${isLoaded ? style.loaded : ''}`}
+            alt={thumbnail?.alt_text || title}
+            loading="lazy"
+            decoding="async"
+            ref={(img) => {
+              if (img?.complete && img.naturalWidth > 0) setIsLoaded(true);
+            }}
+            onLoad={() => setIsLoaded(true)}
+            onError={() => setIsFailed(true)}
+          />
+        </motion.div>
+      </div>
     </div>
   );
 };

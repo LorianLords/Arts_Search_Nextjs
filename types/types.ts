@@ -1,5 +1,12 @@
 import React from 'react';
 
+export interface Thumbnail {
+  lqip: string | null;
+  width: number | null;
+  height: number | null;
+  alt_text: string | null;
+}
+
 export interface CardProps {
   id: number;
   title: string;
@@ -7,6 +14,7 @@ export interface CardProps {
   artist_display: string;
   image_id: string;
   image: string | null;
+  thumbnail?: Thumbnail | null;
 }
 
 export interface Links {
@@ -24,6 +32,7 @@ export type CardDetailProps = {
   short_description?: string;
   description: string;
   category_titles: [string];
+  thumbnail?: Thumbnail | null;
 };
 
 export interface ApiResponse {

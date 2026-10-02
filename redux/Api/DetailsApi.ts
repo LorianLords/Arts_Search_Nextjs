@@ -16,7 +16,7 @@ export const detailsApi = apiSlice.injectEndpoints({
           url: '/artworks/' + cardId,
           params: {
             fields:
-              'title,artist_titles,dimensions,short_description,description,date_display,place_of_origin,image_id,category_titles',
+              'title,artist_titles,dimensions,short_description,description,date_display,place_of_origin,image_id,category_titles,thumbnail',
           },
         };
       },
